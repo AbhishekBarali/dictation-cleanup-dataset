@@ -1,12 +1,32 @@
 # Dictation cleanup dataset
 
-3,337 input/output pairs for **post-ASR dictation cleanup**: turning a raw speech
+Input/output pairs for **post-ASR dictation cleanup**: turning a raw speech
 transcript into the text the speaker actually meant to type.
 
 This is not grammar or punctuation correction. Modern recognisers already handle
 those. The task here is speaker *intent*: retractions, redirections,
 clarifications that modify earlier text, spoken formatting requests, and knowing
 when to change nothing at all.
+
+## Three files
+
+| file | rows | what it is |
+|---|---|---|
+| `train-3337.jsonl` | 3,337 | the training corpus |
+| `heldout-374.jsonl` | 374 | held-out evaluation suite |
+| `benchmark-123.jsonl` | 123 | the benchmark subset, a subset of the held-out suite |
+
+The benchmark rows are drawn from the held-out suite, so `benchmark-123` and
+`heldout-374` overlap by design and share `hid-` identifiers. The training corpus
+is disjoint from both.
+
+**Read this before you use the evaluation files.** They were a *held-out* suite,
+which is a property of not being public. Publishing them ends that: any model
+trained after this release may have seen them, so a strong score on these rows
+from a recent model is not evidence of generalisation. They remain useful for
+scoring models that predate this release, for reproducing the numbers in the
+accompanying paper, and as a specification of what the task actually asks for.
+If you need a clean held-out split, build one.
 
 ```json
 {"id": "sf-02008",
@@ -22,15 +42,19 @@ when to change nothing at all.
  "output": "Send it to a.author@example.com and copy the design channel."}
 ```
 
+The training file names its target `output`; the two evaluation files name theirs
+`expected`. That difference is inherited from the tooling and is not meaningful.
+
 ## The most important thing about this dataset
 
-**1,535 of 3,337 rows (46%) have `output` identical to `input`.**
+**1,535 of 3,337 training rows (46%) have `output` identical to `input`.** The
+evaluation files are built the same way: 184 of 374, and 51 of 123.
 
 That is deliberate and it is the point. A cleanup model that edits everything it
-is shown is useless, because most dictation arrives already correct. Half this
-corpus exists to teach a model to leave text alone. If you train on it and drop
-the no-op rows, you will build a model that damages correct text, and the loss
-curve will look fine while it happens.
+is shown is useless, because most dictation arrives already correct. Nearly half
+this corpus exists to teach a model to leave text alone. If you train on it and
+drop the no-op rows, you will build a model that damages correct text, and the
+loss curve will look fine while it happens.
 
 ## Fields
 
@@ -94,13 +118,34 @@ two is not measured, and you should not assume it is small.
 
 ## What is withheld, and why
 
-One row (`sf-00018`) is held back. It was the only row in the corpus carrying
-verbatim recogniser output from a session rather than a reconstruction.
+**56 rows are held back across the three files, and they are all the same kind of
+row.** Every row in this corpus is either `authored` (hand-written reconstruction)
+or `real_asr` (verbatim recogniser output from a session). Only the `authored`
+rows are released:
 
-Personal email addresses belonging to the author were replaced with
-`a.author@example.com`. Internal authoring fields (review notes, correction
-scaffolding) were dropped rather than published, since they were review material
-and not part of the data.
+| file | released | withheld |
+|---|---|---|
+| `train-3337.jsonl` | 3,337 authored | 1 real_asr |
+| `heldout-374.jsonl` | 374 authored | 28 real_asr |
+| `benchmark-123.jsonl` | 123 authored | 27 real_asr |
+
+The `real_asr` rows are the only ones carrying verbatim session text rather than a
+reconstruction, which makes them both the rows that could contain participant
+speech and the rows containing personal content belonging to the author. They are
+withheld for both reasons. The benchmark and held-out withheld sets overlap, since
+one is a subset of the other.
+
+The practical consequence for anyone reproducing the accompanying paper's numbers:
+those numbers were computed over the full sets including the `real_asr` rows, so
+scores computed on these released files will differ. The released rows are the
+majority in every case and the phenomenon coverage is unchanged, but the figures
+are not expected to match to the decimal.
+
+Personal email addresses belonging to the author, and one real institutional
+address that survived de-identification, were replaced with `example` placeholders.
+Internal authoring fields (review notes, correction scaffolding, gate and track
+markers) were dropped rather than published, since they were review material and
+not part of the data.
 
 Names appearing in rows are either fictional or, in a handful of name-spelling
 test cases, the author's own. Those are kept: the point of those rows is a real
