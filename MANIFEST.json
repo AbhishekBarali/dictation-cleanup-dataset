@@ -1,41 +1,107 @@
 {
-  "rows": 3337,
-  "no_op_identical_rows": 1535,
-  "categories": {
-    "no_op": 1071,
-    "retraction": 316,
-    "wrong_word_right_transcription": 308,
-    "spoken_command": 306,
-    "format_intent": 235,
-    "dictated_question": 186,
-    "instruction_as_text": 162,
-    "spoken_symbol": 150,
-    "disfluency_artifact": 142,
-    "speaker_grammar": 121,
-    "clarification": 117,
-    "empty_or_noise": 71,
-    "truncated_input": 52,
-    "hallucination_loop": 50,
-    "language_preserved": 50
+  "files": {
+    "train-3337.jsonl": {
+      "rows": 3337,
+      "identity_rows": 1535,
+      "categories": {
+        "no_op": 1071,
+        "retraction": 316,
+        "wrong_word_right_transcription": 308,
+        "spoken_command": 306,
+        "format_intent": 235,
+        "dictated_question": 186,
+        "instruction_as_text": 162,
+        "spoken_symbol": 150,
+        "disfluency_artifact": 142,
+        "speaker_grammar": 121,
+        "clarification": 117,
+        "empty_or_noise": 71,
+        "truncated_input": 52,
+        "hallucination_loop": 50,
+        "language_preserved": 50
+      },
+      "fields": [
+        "category",
+        "id",
+        "input",
+        "input_source",
+        "length",
+        "mode",
+        "output",
+        "persona",
+        "subcategory"
+      ],
+      "role": "training corpus",
+      "withheld_real_asr": 1
+    },
+    "heldout-374.jsonl": {
+      "rows": 374,
+      "identity_rows": 184,
+      "categories": {
+        "no_op": 61,
+        "retraction": 50,
+        "format_intent": 42,
+        "wrong_word_right_transcription": 40,
+        "spoken_command": 34,
+        "speaker_grammar": 28,
+        "spoken_symbol": 19,
+        "disfluency_artifact": 19,
+        "clarification": 18,
+        "instruction_as_text": 16,
+        "dictated_question": 15,
+        "truncated_input": 10,
+        "hallucination_loop": 8,
+        "language_preserved": 7,
+        "empty_or_noise": 7
+      },
+      "fields": [
+        "category",
+        "expected",
+        "id",
+        "input",
+        "mode",
+        "persona",
+        "provenance",
+        "subcategory"
+      ],
+      "role": "held-out evaluation suite",
+      "withheld_real_asr": 28
+    },
+    "benchmark-123.jsonl": {
+      "rows": 123,
+      "identity_rows": 51,
+      "categories": {
+        "no_op": 18,
+        "format_intent": 17,
+        "spoken_command": 13,
+        "retraction": 10,
+        "speaker_grammar": 10,
+        "disfluency_artifact": 10,
+        "clarification": 9,
+        "spoken_symbol": 8,
+        "wrong_word_right_transcription": 6,
+        "instruction_as_text": 5,
+        "hallucination_loop": 4,
+        "language_preserved": 4,
+        "truncated_input": 3,
+        "empty_or_noise": 3,
+        "dictated_question": 3
+      },
+      "fields": [
+        "category",
+        "expected",
+        "id",
+        "input",
+        "provenance",
+        "subcategory"
+      ],
+      "role": "benchmark subset of the held-out suite",
+      "withheld_real_asr": 27
+    }
   },
-  "personas": 46,
-  "fields": [
-    "category",
-    "id",
-    "input",
-    "input_source",
-    "length",
-    "mode",
-    "output",
-    "persona",
-    "subcategory"
-  ],
-  "provenance": {
-    "authored": 3337
-  },
-  "withheld_row_ids": [
-    "sf-00018"
-  ],
-  "redaction": "author's personal email addresses replaced with a.author@example.com; internal authoring fields dropped",
+  "provenance": "every released row is 'authored': hand-written reconstruction, no language model involved",
+  "withheld": "all 'real_asr' rows (verbatim session output) across all three files",
+  "redaction": "author's personal emails and one real institutional address replaced with example placeholders; internal authoring fields dropped",
+  "caveat": "the evaluation files were held-out; publishing them ends that property",
   "license": "CC BY 4.0"
 }
