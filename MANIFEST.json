@@ -1,0 +1,41 @@
+{
+  "rows": 3337,
+  "no_op_identical_rows": 1535,
+  "categories": {
+    "no_op": 1071,
+    "retraction": 316,
+    "wrong_word_right_transcription": 308,
+    "spoken_command": 306,
+    "format_intent": 235,
+    "dictated_question": 186,
+    "instruction_as_text": 162,
+    "spoken_symbol": 150,
+    "disfluency_artifact": 142,
+    "speaker_grammar": 121,
+    "clarification": 117,
+    "empty_or_noise": 71,
+    "truncated_input": 52,
+    "hallucination_loop": 50,
+    "language_preserved": 50
+  },
+  "personas": 46,
+  "fields": [
+    "category",
+    "id",
+    "input",
+    "input_source",
+    "length",
+    "mode",
+    "output",
+    "persona",
+    "subcategory"
+  ],
+  "provenance": {
+    "authored": 3337
+  },
+  "withheld_row_ids": [
+    "sf-00018"
+  ],
+  "redaction": "author's personal email addresses replaced with a.author@example.com; internal authoring fields dropped",
+  "license": "CC BY 4.0"
+}
