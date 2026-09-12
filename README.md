@@ -58,6 +58,12 @@ loss curve will look fine while it happens.
 
 ## Fields
 
+The training file and the two evaluation files do not share a schema. The training file
+names its target `output`; the evaluation files name it `expected` and carry two extra
+fields the scorer reads.
+
+`train-3337.jsonl`:
+
 | field | meaning |
 |---|---|
 | `id` | stable row identifier |
@@ -69,6 +75,30 @@ loss curve will look fine while it happens.
 | `length` | rough length band |
 | `persona` | one of 46 speaker personas, so a model does not overfit one voice |
 | `input_source` | `authored` for every released row, see Provenance |
+
+`heldout-374.jsonl` and `benchmark-123.jsonl`:
+
+| field | meaning |
+|---|---|
+| `id` | stable row identifier |
+| `input` | the raw transcript as a recogniser produced it |
+| `expected` | the text the speaker meant, per the cleanup specification |
+| `category` | phenomenon class, see below |
+| `subcategory` | finer split within the category |
+| `provenance` | `authored` for every released row, see Provenance |
+| `bucket` | input length band: `under_50`, `50_199`, `200_499`, `500_plus`, `800_plus` |
+| `mode`, `persona` | present in `heldout-374.jsonl` only |
+
+A row is a no-op when `input` and `expected` are byte-identical. That is 51 of the 123
+benchmark rows and 184 of the 374 held-out rows.
+
+## Checking the numbers
+
+`SCORING.md` documents how to reproduce every score, and `scoring/` plus
+`model-outputs/` contain the grader and the per-row outputs of eight systems on both
+evaluation files. The scores you get from those files will not equal the tables in the
+paper, because the paper computes over the full 150 and 402 rows including the withheld
+ones. `SCORING.md` prints the exact figures the released subsets produce.
 
 ## Categories
 
